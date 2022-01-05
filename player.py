@@ -1,15 +1,17 @@
 import pygame
 from projectile import Projectile
+import animation
 
-class Player(pygame.sprite.Sprite):
+
+class Player(animation.AnimateSprite):
 
     def __init__(self, game):
 
-        super().__init__()
+        super().__init__('player')
         self.game = game
         self.all_projectiles_right = pygame.sprite.Group()
         self.all_projectiles_left = pygame.sprite.Group()
-        self.image = pygame.image.load('assets/player.png')
+
         self.rect = self.image.get_rect()
         self.rect.x = 400
         self.rect.y = 500
@@ -17,6 +19,10 @@ class Player(pygame.sprite.Sprite):
         self.attack = 35
         self.health = 100
         self.health_max = 100
+        self.sound = pygame.mixer.Sound("assets/sounds/tir.ogg")
+
+    def update_animate(self):
+        self.animate()
 
     def damage(self, amount):
         if self.health - amount > amount:
@@ -29,17 +35,15 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(surface, (60, 63, 60), [self.rect.x + 50, self.rect.y + 20, self.health_max, 8])
         pygame.draw.rect(surface, (111, 206, 46), [self.rect.x + 50, self.rect.y + 20, self.health, 8])
 
-
     def lunch_projectile_right(self):
-
         self.all_projectiles_right.add(Projectile(self))
+        self.sound.play()
 
     def lunch_projectile_left(self):
         self.all_projectiles_left.add(Projectile(self))
-
+        self.sound.play()
 
     def move_right(self):
-
         if not self.game.check_collision(self, self.game.all_monsters):
             self.rect.x = self.rect.x + self.speedPlayer
 
@@ -50,7 +54,6 @@ class Player(pygame.sprite.Sprite):
     def move_down(self):
         #cheat
         self.rect.y = self.rect.y + self.speedPlayer
-
 
     def move_left(self):
         self.rect.x = self.rect.x - self.speedPlayer

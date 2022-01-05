@@ -13,6 +13,7 @@ class Comet(pygame.sprite.Sprite):
         self.rect.x = random.randint(20, 800)
         self.rect.y -= random.randint(20, 800)
         self.comet_event = comet_event
+        self.sound = pygame.mixer.Sound("assets/sounds/meteorite.ogg")
 
     def remove(self):
         self.comet_event.all_comets.remove(self)
@@ -21,10 +22,12 @@ class Comet(pygame.sprite.Sprite):
             self.comet_event.game.spawn_monster()
             self.comet_event.game.spawn_monster()
 
+
     def fall(self):
         self.rect.y += self.velocity
         if self.rect.y >= 500:
             self.remove()
+            self.sound.play()
             if len(self.comet_event.all_comets) == 0:
                 self.comet_event.reset_percent()
                 self.comet_event.fall_mode = False
@@ -33,3 +36,4 @@ class Comet(pygame.sprite.Sprite):
         ):
             self.remove()
             self.comet_event.game.player.damage(20)
+            self.sound.play()

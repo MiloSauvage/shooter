@@ -1,21 +1,25 @@
 import pygame
 import random
+import animation
 
 
-class Monster(pygame.sprite.Sprite):
+class Monster(animation.AnimateSprite):
 
     def __init__(self, game):
-        super().__init__()
+        super().__init__("mummy")
         self.game = game
 
         self.health = 100
         self.health_max = 100
-        self.image = pygame.image.load('assets/mummy.png')
+
         self.rect = self.image.get_rect()
         self.rect.x = 1000 + random.randint(0, 300)
         self.rect.y = 540
         self.speed = random.randint(1, 2)
         self.attack = 0.3
+
+    def update_animation(self):
+        self.animate()
 
     def damage(self, amount):
         self.health -= amount

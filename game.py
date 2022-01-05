@@ -11,9 +11,12 @@ class Game:
         self.all_players = pygame.sprite.Group()
         self.player = Player(self)
         self.all_players.add(self.player)
+
         self.comet_event = CometFallEvent(self)
         self.all_monsters = pygame.sprite.Group()
         self.pressed = {}
+        self.sound = pygame.mixer.Sound("assets/sounds/game_over.ogg")
+        self.score = 0
 
     def start(self):
         self.is_playing = True
@@ -25,14 +28,19 @@ class Game:
         self.all_monsters = pygame.sprite.Group()
         self.player.health = self.player.health_max
         self.is_playing = False
+        self.sound.play()
 
     def update(self, screen):
+        font = pygame.font.SysFont("Segoe UI", 30)
+        score_text = font.render(f"score : {self.score}", True, (0, 0, 0))
+        screen.blit(score_text, (20, 20))
 
         screen.blit(self.player.image, self.player.rect)
 
         self.player.update_health_bar(screen)
 
         self.comet_event.update_bar(screen)
+        #self.player.update_animate()
 
         for projectile in self.player.all_projectiles_right:
             projectile.move_right()
@@ -45,7 +53,7 @@ class Game:
         for monster in self.all_monsters:
             monster.forward()
             monster.update_health_bar(screen)
-
+            #monster.update_animation()
         self.player.all_projectiles_right.draw(screen)
         self.player.all_projectiles_left.draw(screen)
 

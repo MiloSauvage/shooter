@@ -21,6 +21,7 @@ play_button_rect = play_button.get_rect()
 play_button_rect.x = banner_rect.x + 63
 play_button_rect.y = banner_rect.y + 360
 
+sound = pygame.mixer.Sound("assets/sounds/click.ogg")
 
 game = Game()
 
@@ -63,5 +64,7 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if play_button_rect.collidepoint(event.pos):
                 game.start()
+                sound.play()
+
 
 pygame.quit()
